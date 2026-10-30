@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block contenido %}
+<div class="grid" style="margin-bottom:18px">
+  {% for nombre, valor in resumen %}<div class="card" style="margin:0"><div class="kpi">{{ valor }}</div><div class="kpil">{{ nombre }}</div></div>{% endfor %}
+</div>
+<div class="card"><h3>Cómo usar el sistema</h3>
+  <p>Sigue este orden: <b>Jornadas</b> → <b>Lotes</b> → <b>Animales</b> (todos los del lote) → <b>Subasta en vivo</b> → <b>Vender lote</b> → <b>Facturas</b> y <b>Ganancias</b>.</p>
+  <p>Los datos viven en memoria: si el servicio se reinicia, se pierden. Para una demostración rápida puedes cargar datos de ejemplo.</p>
+  {% if usuario and usuario.rol == "administrador" %}<form method="post" action="{{ url_for('demo') }}"><button>Cargar datos de ejemplo</button></form>{% endif %}
+</div>
+{% endblock %}

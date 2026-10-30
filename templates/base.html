@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titulo }} · Subasta de Ganado</title>
+<style>
+:root{--fondo:#f3f4f7;--panel:#fff;--borde:#e4e6ec;--texto:#13151a;--suave:#5b6170;--acento:#059669;--acento2:#047857;--suave2:#e6f6ef;--alerta:#dc2626;--alerta2:#fdeded;--side:#13151c}
+*{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",system-ui,sans-serif;background:var(--fondo);color:var(--texto);display:flex;min-height:100vh}
+nav{width:230px;background:var(--side);padding:20px 12px;flex-shrink:0}
+nav .marca{color:#fff;font-weight:700;font-size:15px;padding:0 10px 4px}nav .sub{color:#8d93a3;font-size:11px;padding:0 10px 16px}
+nav a{display:block;color:#8d93a3;text-decoration:none;padding:9px 10px;border-radius:6px;font-size:14px}
+nav a:hover{background:#1d2028;color:#fff}nav a.activa{background:#182620;color:#fff;border-left:3px solid var(--acento)}
+main{flex:1;padding:28px 34px;min-width:0}h1{margin:0;font-size:26px}.sub2{color:var(--suave);margin:4px 0 22px;font-size:13px}
+.card{background:var(--panel);border:1px solid var(--borde);border-radius:10px;padding:18px 20px;margin-bottom:18px}
+.card h3{margin:0 0 12px;font-size:15px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px 16px}
+label{display:block;font-size:11px;font-weight:700;color:var(--suave);text-transform:uppercase;margin-bottom:4px}
+input,select{width:100%;padding:9px 10px;border:1px solid var(--borde);border-radius:6px;font-size:14px;background:#fff}
+input:focus,select:focus{outline:2px solid var(--acento);border-color:var(--acento)}
+button,.btn{background:var(--acento);color:#fff;border:0;border-radius:6px;padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;margin-top:14px;text-decoration:none;display:inline-block}
+button:hover,.btn:hover{background:var(--acento2)}td button{margin:0;padding:5px 10px;font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;font-size:11px;text-transform:uppercase;color:var(--suave);padding:8px;border-bottom:2px solid var(--borde)}
+td{padding:8px;border-bottom:1px solid var(--borde)}.vacio{color:var(--suave);font-size:13px;padding:6px 0}.tw{overflow-x:auto}
+.msg{padding:11px 14px;border-radius:8px;margin-bottom:12px;font-size:14px}.msg.ok{background:var(--suave2);color:var(--acento2)}.msg.error{background:var(--alerta2);color:var(--alerta)}.msg.aviso{background:#fff7e0;color:#92600a}
+pre{background:#fafafa;border:1px solid var(--borde);padding:14px;border-radius:8px;overflow-x:auto;font-size:13px}
+.kpi{font-size:28px;font-weight:700;color:var(--acento)}.kpil{font-size:12px;color:var(--suave);text-transform:uppercase}
+@media(max-width:760px){body{flex-direction:column}nav{width:100%;display:flex;flex-wrap:wrap;gap:4px;padding:10px}nav .marca,nav .sub{display:none}main{padding:18px}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="marca">Subasta de Ganado</div><div class="sub">Control de operaciones</div>
+  {% if usuario %}<div class="sub" style="padding-bottom:8px">{{ usuario.nombre or usuario.usuario }} · {{ usuario.rol }}</div>{% endif %}
+  {% for clave, nombre in menu %}<a href="{{ url_for(clave) }}" class="{{ 'activa' if clave == activa }}">{{ nombre }}</a>{% endfor %}
+  {% if usuario %}<form method="post" action="{{ url_for('logout') }}"><button style="background:#22252f;width:100%;margin-top:16px">Cerrar sesión</button></form>{% endif %}
+</nav>
+<main>
+  <h1>{{ titulo }}</h1><p class="sub2">{{ subtitulo }}</p>
+  {% for cat, m in get_flashed_messages(with_categories=true) %}<div class="msg {{ cat }}">{{ m }}</div>{% endfor %}
+  {% block contenido %}{% endblock %}
+</main>
+</body>
+</html>

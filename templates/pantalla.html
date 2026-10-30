@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block contenido %}
+{% for b in bloques %}
+  {% if b.tipo == "form" %}
+  <div class="card">{% if b.titulo %}<h3>{{ b.titulo }}</h3>{% endif %}
+    <form method="{{ b.metodo or 'post' }}" action="{{ b.accion }}" enctype="multipart/form-data">
+      <div class="grid">
+      {% for c in b.campos %}
+        {% if c.tipo == "hidden" %}<input type="hidden" name="{{ c.name }}" value="{{ c.valor }}">
+        {% else %}<div><label for="{{ c.name }}">{{ c.label }}</label>
+          {% if c.tipo == "select" %}
+            <select name="{{ c.name }}" id="{{ c.name }}" {{ 'required' if c.req }}>
+              {% if not c.opciones %}<option value="">(no hay opciones disponibles)</option>{% endif %}
+              {% for v, t in c.opciones %}<option value="{{ v }}" {{ 'selected' if c.valor|string == v|string }}>{{ t }}</option>{% endfor %}
+            </select>
+          {% else %}<input type="{{ c.tipo }}" name="{{ c.name }}" id="{{ c.name }}" value="{{ c.valor }}" {% if c.paso %}step="{{ c.paso }}"{% endif %} {{ 'required' if c.req }}>
+          {% endif %}</div>{% endif %}
+      {% endfor %}
+      </div>
+      <button type="submit">{{ b.boton }}</button>
+    </form>
+  </div>
+  {% elif b.tipo == "tabla" %}
+  <div class="card"><h3>{{ b.titulo }}</h3>
+    {% if b.filas %}<div class="tw"><table><tr>{% for c in b.cols %}<th>{{ c }}</th>{% endfor %}</tr>
+      {% for fila in b.filas %}<tr>{% for cel in fila %}<td>
+        {% if cel is mapping and cel.boton %}<form method="post" action="{{ cel.accion }}"><button>{{ cel.boton }}</button></form>
+        {% elif cel is mapping and cel.enlaces %}{% for t, u in cel.enlaces %}<a href="{{ u }}">{{ t }}</a> {% endfor %}
+        {% elif cel is mapping and cel.enlace %}<a href="{{ cel.accion }}">{{ cel.enlace }}</a>
+        {% else %}{{ cel }}{% endif %}</td>{% endfor %}</tr>{% endfor %}</table></div>
+    {% else %}<div class="vacio">Aún no hay registros.</div>{% endif %}
+  </div>
+  {% elif b.tipo == "texto" %}<div class="card">{{ b.texto }}{% if b.enlaces %} {% for t, u in b.enlaces %}<a class="btn" style="margin:0 6px 0 0" href="{{ u }}">{{ t }}</a>{% endfor %}{% endif %}</div>
+  {% elif b.tipo == "pre" %}<pre>{{ b.texto }}</pre>
+  {% endif %}
+{% endfor %}
+{% endblock %}
