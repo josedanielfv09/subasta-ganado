@@ -24,3 +24,12 @@ Ejecutar el archivo principal:
 - José Fernández
 - Martín López
 - Jesús Ruiz
+
+
+## Requerimientos principales
+- Registro de lotes de 10 a 30 animales
+- Registro de animales con tipo, raza, peso e ICA único
+- Jornadas de subasta (lunes, miércoles y sábado)
+- Subasta en vivo con pujas por kilo
+- Cálculo de ganancias por lote y generales
+- Facturación y reportes
